@@ -170,9 +170,7 @@ public class IntentClassifier
 
         foreach (var filePath in GetFiles())
         {
-            var texts = File.ReadAllLines(filePath, Encoding.UTF8)
-                .Select(x => TextClean(x))
-                .ToList();
+            var texts = File.ReadAllLines(filePath, Encoding.UTF8).ToList();
 
             vectorList.AddRange(vector.GetVectors(texts));
             string fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -227,19 +225,6 @@ public class IntentClassifier
         }
 
         return _labels;
-    }
-
-    public string TextClean(string text)
-    {
-        // Remove punctuation
-        // Remove digits
-        // To lowercase
-        var processedText = Regex.Replace(text, "[AB0-9]", " ");
-        var replacedTextList = processedText.Select(c => char.IsPunctuation(c) ? ' ' : c).ToList();
-
-        return string.Join("", replacedTextList)
-            .Replace("  ", " ")
-            .ToLower();
     }
 
     public string Predict(NDArray vector, float confidenceScore = 0.9f)
